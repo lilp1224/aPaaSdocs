@@ -1,15 +1,15 @@
 <!-- _coverpage.md -->
 
-![logo](_media/icon.svg)
+![logo](https://static.lee1224.com/bg/bg0.jpg)
 
-# docsify <small>3.5</small>
+# fuck aPasS <small>嘻嘻嘻~</small>
 
-> 一个神奇的文档网站生成器。
+> 优雅地复制粘贴
 
-- 简单、轻便 (压缩后 ~21kB)
-- 无需生成 html 文件
-- 众多主题
+- 速度要快
+- 动作要帅
+- skr~
 
-[GitHub](https://github.com/docsifyjs/docsify/)
+[GitHub](https://github.com/lilp1224/aPasSdocs)
 [Get Started](#Headline)
 
