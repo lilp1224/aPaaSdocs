@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-![logo](https://static.lee1224.com/navbarlogo2.png)
+<img src="https://static.lee1224.com/navbarlogo.png" alt="logo" style="zoom:33%;" />
 
 # fuck aPasS <small>嘻嘻嘻~</small>
 
