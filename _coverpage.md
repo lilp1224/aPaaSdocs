@@ -11,12 +11,8 @@
 - skr~
 
 [GitHub](https://github.com/lilp1224/aPasSdocs)
-[Get Started](#Headline)
+[Get Started](#Headline) 
 
 <!-- 背景图片 --> 
 
-![](https://static.lee1224.com/bg/bg0.jpg) 
-
-<!-- 背景色 -->
-
-![color](#f0f0f0)
+![](https://static.lee1224.com/bg/bg0.jpg)
