@@ -1,42 +1,65 @@
-# Headline
+# aPasS踩坑记录
 
-> An awesome project. Hello lilpum~ 666 牛逼77
+……
 
-```java
-package com.wxchina.fp.approval.controller;
 
-import com.wxchina.fp.approval.entity.MyResponseEntity;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
-/**
- * @program: fp-docker部署版本
- * @description:
- * @author: lilpum
- * @create: 2021-06-16 18:10
- **/
-@ControllerAdvice
-public class ExceptionConfigController {
-    // 专门用来捕获和处理Controller层的空指针异常
-    @ExceptionHandler(NullPointerException.class)
-    public ResponseEntity<MyResponseEntity> nullPointerExceptionHandler(NullPointerException e) {
-        return new ResponseEntity<>(new MyResponseEntity(HttpStatus.BAD_REQUEST.value(), "空指针异常!" + e.getCause()), HttpStatus.BAD_REQUEST);
-    }
+# tips：小站部署
 
-    // 专门用来捕获和处理Controller层的运行时异常
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<MyResponseEntity> runtimeExceptionHandler(RuntimeException e) {
-        return new ResponseEntity<>(new MyResponseEntity(HttpStatus.BAD_REQUEST.value(), "运行时异常!" + e.getCause()), HttpStatus.BAD_REQUEST);
-    }
+## 方式1：git仓库托管
 
-    // 专门用来捕获和处理Controller层的异常
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<MyResponseEntity> exceptionHandler(Exception e) {
-        return new ResponseEntity<>(new MyResponseEntity(HttpStatus.BAD_REQUEST.value(), "出现异常!" + e.getCause()), HttpStatus.BAD_REQUEST);
-    }
-}
+直接上传至GitHub或者gitee，开启pages功能即可。有条件可以上域名上CDN。
 
-```
+方式二：
 
+docker部署：
+
+1. 首先根据[官网教程](https://docsify.js.org/#/quickstart)进行本地初始化。
+
+2. 在当前目录创建dockerfile
+
+   ```dockerfile
+   FROM node:latest
+   LABEL description="Dockerfile for build Docsify."
+   WORKDIR /docs
+   RUN npm install -g docsify-cli@latest
+   EXPOSE 3000/tcp
+   ENTRYPOINT docsify serve .
+   ```
+
+3. 构建镜像运行容器（映射出docs文件夹到宿主机）（可以在idea容器管理工具中进行远程构建）
+
+   ```shell
+   docker build -f Dockerfile -t docsify/demo .
+   docker run -itp 3000:3000 --name=docsify -v $(pwd):/docs docsify/demo
+   ```
+
+4. 在宿主机初始化一个空的git仓库并在hooks文件夹中添加post-receive文件 让git仓库接收到push时自动做一些事情
+
+   ```shell
+   #!/bin/bash
+   rm -rf /root/data/aPasSdocs/*
+   rm -rf /root/data/aPasSdocs/.git
+   rm -rf /root/data/aPasSdocs/.gitignore
+   rm -rf /root/data/aPasSdocs/.nojekyll
+   git clone /root/git/aPasSdocs.git /root/data/aPasSdocs
+   ```
+
+5. 在本地目录下添加.gitignore文件忽略同步一些文件
+
+   ```shell
+   .idea/
+   Dockerfile
+   *.sh
+   ```
+
+6. 添加以一个.sh文件，当编辑完内容后自动执行推送
+
+   ```shell
+   #!/bin/bash
+   git add .
+   git commit -m"自动提交"
+   git push
+   ```
+
+7. done!
