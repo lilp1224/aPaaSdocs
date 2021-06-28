@@ -36,7 +36,7 @@ docker部署：
 
 4. 在宿主机初始化一个空的git仓库并在hooks文件夹中添加post-receive文件 让git仓库接收到push时自动做一些事情
 
-   ```shell
+   ```bash
    #!/bin/bash
    rm -rf /root/data/aPasSdocs/*
    rm -rf /root/data/aPasSdocs/.git
@@ -47,7 +47,7 @@ docker部署：
 
 5. 在本地目录下添加.gitignore文件忽略同步一些文件
 
-   ```shell
+   ```bash
    .idea/
    Dockerfile
    *.sh
@@ -55,7 +55,7 @@ docker部署：
 
 6. 添加以一个.sh文件，当编辑完内容后自动执行推送
 
-   ```shell
+   ```bash
    #!/bin/bash
    git add .
    git commit -m"自动提交"
