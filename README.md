@@ -29,7 +29,7 @@ docker部署：
 
 3. 构建镜像运行容器（映射出docs文件夹到宿主机）（可以在idea容器管理工具中进行远程构建）
 
-   ```shell
+   ```bash
    docker build -f Dockerfile -t docsify/demo .
    docker run -itp 3000:3000 --name=docsify -v $(pwd):/docs docsify/demo
    ```
