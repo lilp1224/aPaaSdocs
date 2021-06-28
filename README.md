@@ -10,9 +10,7 @@
 
 直接上传至GitHub或者gitee，开启pages功能即可。有条件可以上域名上CDN。
 
-方式二：
-
-docker部署：
+## 方式二：docker部署
 
 1. 首先根据[官网教程](https://docsify.js.org/#/quickstart)进行本地初始化。
 
