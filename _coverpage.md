@@ -12,3 +12,7 @@
 
 [GitHub](https://github.com/lilp1224/aPasSdocs)
 [Get Started](#aPasS踩坑记录) 
+
+<!-- 背景图片 --> 
+
+![](https://static.lee1224.com/bg/bg0.jpg)
