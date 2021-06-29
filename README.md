@@ -55,11 +55,11 @@
 
 问题描述：正常情况daterange控件可以直接绑定开始和结束时间戳（在搜索栏中可以正常绑定）。可有事会出现绑定后不生效，请求参数中直接以json字符串形式进行传输。
 
-![image-20210629185616134](C:\Users\73172\AppData\Roaming\Typora\typora-user-images\image-20210629185616134.png)
+![image-20210629185616134](https://static.lee1224.com/aPasSdocs/image-20210629185616134.png)
 
-![image-20210629190029444](C:\Users\73172\AppData\Roaming\Typora\typora-user-images\image-20210629190029444.png)
+![image-20210629190029444](https://static.lee1224.com/aPasSdocs/image-20210629190029444.png)
 
-![image-20210629190302951](C:\Users\73172\AppData\Roaming\Typora\typora-user-images\image-20210629190302951.png)
+![image-20210629190302951](https://static.lee1224.com/aPasSdocs/image-20210629190302951.png)
 
 解决办法：
 
