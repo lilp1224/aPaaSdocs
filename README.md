@@ -1,18 +1,18 @@
-# aPasS踩坑记录
+# aPaaS踩坑记录
 
 ## 下拉菜单联动
 
 问题：联动下拉菜单（键值对形式例如：字典、数据源）清除父级value时字迹菜单option清除，获取不到文本直接显示键值。如图：
 
-![image-20210629131236759](https://static.lee1224.com/aPasSdocs/image-20210629131236757.png)
+![image-20210629131236759](https://static.lee1224.com/aPaaSdocs/image-20210629131236757.png)
 
-![image-20210629131618317](https://static.lee1224.com/aPasSdocs/image-20210629131618317.png)
+![image-20210629131618317](https://static.lee1224.com/aPaaSdocs/image-20210629131618317.png)
 
 解决方法：
 
 1. 父级菜单值改变时加载子菜单的option（例如：加载字典），并且指定根据父级的值来查询子级option并绑定。
 
-   <img src="https://static.lee1224.com/aPasSdocs/image-20210629133030005.png" alt="image-20210629133030005" style="zoom: 50%;" />
+   <img src="https://static.lee1224.com/aPaaSdocs/image-20210629133030005.png" alt="image-20210629133030005" style="zoom: 50%;" />
 
 2. 添加UIflycode处理子菜单当前值是否显示。
 
@@ -37,7 +37,7 @@
    
 3. done!
 
-   ![image-20210629134114801](https://static.lee1224.com/aPasSdocs/image-20210629134114801.png)
+   ![image-20210629134114801](https://static.lee1224.com/aPaaSdocs/image-20210629134114801.png)
    
 4. 补充一句 数据源同理 灵活运用
 
@@ -55,11 +55,11 @@
 
 问题描述：正常情况daterange控件可以直接绑定开始和结束时间戳（在搜索栏中可以正常绑定）。可有事会出现绑定后不生效，请求参数中直接以json字符串形式进行传输。
 
-<img src="https://static.lee1224.com/aPasSdocs/image-20210629185616134.png" alt="image-20210629185616134" style="zoom:67%;" />
+<img src="https://static.lee1224.com/aPaaSdocs/image-20210629185616134.png" alt="image-20210629185616134" style="zoom:67%;" />
 
-<img src="https://static.lee1224.com/aPasSdocs/image-20210629190029444.png" alt="image-20210629190029444" style="zoom: 50%;" />
+<img src="https://static.lee1224.com/aPaaSdocs/image-20210629190029444.png" alt="image-20210629190029444" style="zoom: 50%;" />
 
-<img src="https://static.lee1224.com/aPasSdocs/image-20210629190302951.png" alt="image-20210629190302951" style="zoom:67%;" />
+<img src="https://static.lee1224.com/aPaaSdocs/image-20210629190302951.png" alt="image-20210629190302951" style="zoom:67%;" />
 
 解决办法：
 
@@ -114,11 +114,11 @@
 
    ```bash
    #!/bin/bash
-   rm -rf /root/data/aPasSdocs/*
-   rm -rf /root/data/aPasSdocs/.git
-   rm -rf /root/data/aPasSdocs/.gitignore
-   rm -rf /root/data/aPasSdocs/.nojekyll
-   git clone /root/git/aPasSdocs.git /root/data/aPasSdocs
+   rm -rf /root/data/aPaaSdocs/*
+   rm -rf /root/data/aPaaSdocs/.git
+   rm -rf /root/data/aPaaSdocs/.gitignore
+   rm -rf /root/data/aPaaSdocs/.nojekyll
+   git clone /root/git/aPaaSdocs.git /root/data/aPaaSdocs
    ```
 
 5. 在本地目录下添加.gitignore文件忽略同步一些文件
