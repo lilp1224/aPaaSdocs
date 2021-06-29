@@ -2,7 +2,7 @@
 
 <img src="https://static.lee1224.com/navbarlogo.png" alt="logo" style="zoom:33%;" />
 
-# fuck aPasS <small>众所周知 `fuck` 译作：学习</small>
+# Fuck aPasS <small>众所周知 `fuck` 译作:学习</small>
 
 > 优雅地复制粘贴
 
