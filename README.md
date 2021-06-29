@@ -23,22 +23,18 @@
    // 获取子菜单当前下拉列表
    let options = tmp.getOption();
    // 遍历下拉列表判断当前值是否存其中
-   // 存在则可以正常显示无需处理，不存在则清除当前值
    let flag = true;
    options.forEach((v) => {
        if (curValue == v.key) {
            flag = !flag
        }
    });
+   // 存在则可以正常显示无需处理，不存在则清除当前值
    if (flag) {
        tmp.value = "";
    }
-   // 如果父级菜单当前为空 那么清除当前子菜单的值
-   if(Page.getPickerCtrl('drobox_region').value){
-       tmp.value = "";
-   }
    ```
-
+   
 3. done!
 
    ![image-20210629134114801](https://static.lee1224.com/aPasSdocs/image-20210629134114801.png)
