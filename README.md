@@ -41,7 +41,7 @@
    
 4. 补充一句 数据源同理 灵活运用
 
-   ```javascript
+   ```js
    // 当父级（txt竞品竞争对手）为空的时候
    if (!Page.getPickerCtrl('txt竞品竞争对手').value) {
        // 清空子级数据源当前数据
@@ -49,6 +49,36 @@
    }
    // 还要清除下拉选项
    Page.getPickerCtrl("txt竞品项目").clearOptions();
+   ```
+
+## daterange控件传值问题
+
+问题描述：正常情况daterange控件可以直接绑定开始和结束时间戳（在搜索栏中可以正常绑定）。可有事会出现绑定后不生效，请求参数中直接以json字符串形式进行传输。
+
+![image-20210629185616134](C:\Users\73172\AppData\Roaming\Typora\typora-user-images\image-20210629185616134.png)
+
+![image-20210629190029444](C:\Users\73172\AppData\Roaming\Typora\typora-user-images\image-20210629190029444.png)
+
+![image-20210629190302951](C:\Users\73172\AppData\Roaming\Typora\typora-user-images\image-20210629190302951.png)
+
+解决办法：
+
+1. 请求时在领域处理json串，将时间戳转换成格式化日期（yyyy-MM-dd HH:mm:ss），PostgreSQL插入时间字段需以这种格式的字符串来传值。
+
+   ```js
+   if (contract.contract_date_range) { // 空字符串、null、undefined均为假; 空数组和空对象为真
+       var date_range_json = JSON.parse(contract.contract_date_range);
+       var start_date_str = new Date(Number(date_range_json.start)).toJSON().substring(0, 10);
+       var end_date_str = new Date(Number(date_range_json.end)).toJSON().substring(0, 10);
+       contract.contract_start_date = start_date_str;
+       contract.contract_end_date = end_date_str;
+   }
+   ```
+
+2. 响应时也是在领域把数据库中查到的开始结束时间，封装成json串，传到daterange控件才可正常显示。
+
+   ```js
+    _output[0].daterange_self = {"start":_output[0].contract_start_date,"end":_output[0].contract_end_date}
    ```
 
 
