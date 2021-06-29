@@ -100,3 +100,17 @@
    ```
 
 7. done!
+
+8. 补充一句 数据源同理 灵活运用
+
+   ```javascript
+   // 当父级（txt竞品竞争对手）为空的时候
+   if (!Page.getPickerCtrl('txt竞品竞争对手').value) {
+       // 清空子级数据源当前数据
+       Page.getPickerCtrl("txt竞品项目").value = "";
+   }
+   // 还要清除下拉选项
+   Page.getPickerCtrl("txt竞品项目").clearOptions();
+   ```
+
+   
