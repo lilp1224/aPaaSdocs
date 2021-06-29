@@ -1,8 +1,47 @@
 # aPasS踩坑记录
 
-……
+## 下拉菜单联动
 
+问题：联动下拉菜单（键值对形式例如：字典、数据源）清除父级value时字迹菜单option清除，获取不到文本直接显示键值。如图：
 
+![image-20210629131236759](https://static.lee1224.com/aPasSdocs/image-20210629131236757.png)
+
+![image-20210629131618317](https://static.lee1224.com/aPasSdocs/image-20210629131618317.png)
+
+解决方法：
+
+1. 父级菜单值改变时加载子菜单的option（例如：加载字典），并且指定根据父级的值来查询子级option并绑定。
+
+   ![image-20210629133030005](https://static.lee1224.com/aPasSdocs/image-20210629133030005.png)
+
+2. 添加UIflycode处理子菜单当前值是否显示。
+
+   ```js
+   // 获取子菜单当前值
+   let tmp = Page.getPickerCtrl("contarct_type_second");
+   let curValue = tmp.value;
+   // 获取子菜单当前下拉列表
+   let options = tmp.getOption();
+   // 判断当前值是否存在下拉列表中，存在则可以正常显示无需处理
+   // 不存在则清楚当前值
+   let flag = true;
+   options.forEach((v) => {
+       if (curValue == v.key) {
+           flag = !flag
+       }
+   });
+   if (flag) {
+       tmp.value = "";
+   }
+   // 如果父级菜单当前为空 那么清楚当前子菜单的值
+   if(Page.getPickerCtrl('contarct_type_first').value == null || Page.getPickerCtrl('contarct_type_first').value == ''){
+       tmp.value = "";
+   }
+   ```
+
+3. done!
+
+   ![image-20210629134114801](https://static.lee1224.com/aPasSdocs/image-20210629134114801.png)
 
 # tips：小站部署
 
