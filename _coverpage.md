@@ -11,7 +11,7 @@
 - skr~
 
 [GitHub](https://github.com/lilp1224/aPasSdocs)
-[Get Started](#aPasS踩坑记录) 
+[Get Started](#aPaaS踩坑记录) 
 
 <!-- 背景图片 --> 
 
