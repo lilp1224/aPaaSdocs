@@ -12,7 +12,7 @@
 
 1. 父级菜单值改变时加载子菜单的option（例如：加载字典），并且指定根据父级的值来查询子级option并绑定。
 
-   <img src="https://static.lee1224.com/aPasSdocs/image-20210629133030005.png" alt="image-20210629133030005" style="zoom: 67%;" />
+   <img src="https://static.lee1224.com/aPasSdocs/image-20210629133030005.png" alt="image-20210629133030005" style="zoom: 50%;" />
 
 2. 添加UIflycode处理子菜单当前值是否显示。
 
@@ -57,7 +57,7 @@
 
 <img src="https://static.lee1224.com/aPasSdocs/image-20210629185616134.png" alt="image-20210629185616134" style="zoom:67%;" />
 
-<img src="https://static.lee1224.com/aPasSdocs/image-20210629190029444.png" alt="image-20210629190029444" style="zoom:67%;" />
+<img src="https://static.lee1224.com/aPasSdocs/image-20210629190029444.png" alt="image-20210629190029444" style="zoom: 50%;" />
 
 <img src="https://static.lee1224.com/aPasSdocs/image-20210629190302951.png" alt="image-20210629190302951" style="zoom:67%;" />
 
