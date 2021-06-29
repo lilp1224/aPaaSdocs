@@ -63,7 +63,7 @@
 
 解决办法：
 
-1. 请求时在领域处理json串，将时间戳转换成格式化日期（yyyy-MM-dd HH:mm:ss），PostgreSQL插入时间字段需以这种格式的字符串来传值。
+1. 请求时在领域处理json串，将时间戳转换成格式化日期（`yyyy-MM-dd HH:mm:ss`），PostgreSQL插入时间字段需以这种格式的字符串来传值。
 
    ```js
    if (contract.contract_date_range) { // 空字符串、null、undefined均为假; 空数组和空对象为真
