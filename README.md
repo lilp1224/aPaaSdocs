@@ -18,12 +18,12 @@
 
    ```js
    // 获取子菜单当前值
-   let tmp = Page.getPickerCtrl("contarct_type_second");
+   let tmp = Page.getPickerCtrl("drobox_region");
    let curValue = tmp.value;
    // 获取子菜单当前下拉列表
    let options = tmp.getOption();
-   // 判断当前值是否存在下拉列表中，存在则可以正常显示无需处理
-   // 不存在则清楚当前值
+   // 遍历下拉列表判断当前值是否存其中
+   // 存在则可以正常显示无需处理，不存在则清除当前值
    let flag = true;
    options.forEach((v) => {
        if (curValue == v.key) {
@@ -33,8 +33,8 @@
    if (flag) {
        tmp.value = "";
    }
-   // 如果父级菜单当前为空 那么清楚当前子菜单的值
-   if(Page.getPickerCtrl('contarct_type_first').value == null || Page.getPickerCtrl('contarct_type_first').value == ''){
+   // 如果父级菜单当前为空 那么清除当前子菜单的值
+   if(Page.getPickerCtrl('drobox_region').value){
        tmp.value = "";
    }
    ```
