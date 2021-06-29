@@ -2,7 +2,7 @@
 
 <img src="https://static.lee1224.com/navbarlogo.png" alt="logo" style="zoom:33%;" />
 
-# fuck aPasS <small>嘻嘻嘻~</small>
+# fuck aPasS <small>众所周知`fuck`</small>译作：搞定、学会
 
 > 优雅地复制粘贴
 
