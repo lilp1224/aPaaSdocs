@@ -148,11 +148,14 @@ if(linkparams.__pagestatus == 2){
 }
 ```
 
+# 系统对象（System.xxx）
 
-
-  
-
-
+|        方法         |         说明         |                            返回值                            |
+| :-----------------: | :------------------: | :----------------------------------------------------------: |
+|     **user()**      |     获取用户信息     | <img src="https://static.lee1224.com/aPaaSdocs/image-20210630115620254.png" alt="image-20210630115620254" style="zoom:33%;" /> |
+|    **context()**    | 获取当前用户登录信息 | <img src="https://static.lee1224.com/aPaaSdocs/image-20210630115657977.png" alt="image-20210630115657977" style="zoom:33%;" /> |
+|     **date()**      |  获取服务端当前时间  |                             Date                             |
+| **functionCodes()** |     获取功能权限     |   返回当前用户的完整功能权限code的数组，Array形如[String]    |
 
 
 
