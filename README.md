@@ -88,7 +88,7 @@
 |       方法        |         简要说明          |                           参数类型                           | 返回值类型 |
 | :---------------: | :-----------------------: | :----------------------------------------------------------: | :--------: |
 |   getInIndexes    |    获取指定多行的数据     |                      Array e.g. [0,1,2]                      |   Array    |
-|    getInScope     |   获取指定范围内的数据    |           String e.g.  **'all'**  、**'checked'**            |   Array    |
+|    getInScope     |   获取指定范围内的数据    |            String e.g.  **'all'**   **'checked'**            |   Array    |
 |    getInScope     |   获取指定范围内的数据    |                  String e.g.  **'focused'**                  |   Object   |
 | getIndexesInScope | 获取指定范围的行的indexes | scope的取值有以下几种取值: **'all'** 全部数据; **'checked'** 勾选数据; **'focused'** 已修改数据; |   Array    |
 
