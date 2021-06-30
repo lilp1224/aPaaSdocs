@@ -159,7 +159,7 @@ SELINUX=disabled
 
 7. done!
 
-### 方式3：
+### 方式3：nginx
 
 1. 安装nginx推荐docker安装，把网站目录以及配置文件映射到宿主机。
 
