@@ -81,6 +81,65 @@
     _output[0].daterange_self = {"start":_output[0].contract_start_date,"end":_output[0].contract_end_date}
    ```
 
+## EditorTable-编辑表格
+
+获取数据：
+
+|       方法        |         简要说明          |                           参数类型                           | 返回值类型 |
+| :---------------: | :-----------------------: | :----------------------------------------------------------: | :--------: |
+|   getInIndexes    |    获取指定多行的数据     |                      Array e.g. [0,1,2]                      |   Array    |
+|    getInScope     |   获取指定范围内的数据    |           String e.g.  **'all'**  、**'checked'**            |   Array    |
+|    getInScope     |   获取指定范围内的数据    |                  String e.g.  **'focused'**                  |   Object   |
+| getIndexesInScope | 获取指定范围的行的indexes | scope的取值有以下几种取值: **'all'** 全部数据; **'checked'** 勾选数据; **'focused'** 已修改数据; |   Array    |
+
+获取控件：
+
+|      方法       |               简要说明               |                       参数类型                       |      返回值类型      |
+| :-------------: | :----------------------------------: | :--------------------------------------------------: | :------------------: |
+| getRowAtIndexes | 获取指定位置的行控件对象ArrayRowCtrl | Array e.g. [0, 2, 3] (int整型参数疑似存在bug...弃用) |        Array         |
+|  getColByName   | 获取指定名字的列控件对象ArrayColCtrl |                        String                        | Object(ArrayColCtrl) |
+
+- 场景1：计算某列数值和进行判断
+
+  ```js
+  let rows = Page.getArrayCtrl('回款情况').getColByName('回款比例');
+  if (rows.sum() > 100) {
+    Page.alert('warning', '回款比例总值大于100%，请重新输入');
+    let autoindex = Page.getArrayCtrl('回款情况').getInScope('focused').autoindex;
+    Page.getArrayCtrl('回款情况').getRowAtIndexes([autoindex - 1])[0].getCtrl('回款比例').value = "";
+  }
+  ```
+
+- 场景2：根据第一列选择的值来判断并且更新第二列的日期默认值
+
+  ```js
+  let create_time = Page.getCtrl('合同创建时间').value;
+  let selected_key = Page.getArrayCtrl('回款情况').getInScope('focused').et_payment_node;
+  let autoindex = Page.getArrayCtrl('回款情况').getInScope('focused').autoindex;
+  
+  if(!create_time){
+      create_time = new Date().getTime();
+  }
+  // 1402171492564865024 预付回款
+  // 1402171553059311616 发货回款
+  // 1402171628267376640 验收回款
+  if (selected_key == 1402171492564865024) {
+      Page.getArrayCtrl('回款情况').getRowAtIndexes([autoindex - 1])[0].getCtrl('预计回款日期').value = create_time;
+  } else if (selected_key == 1402171553059311616) {
+      let date = new Date(Number(create_time));
+      Page.getArrayCtrl('回款情况').getRowAtIndexes([autoindex - 1])[0].getCtrl('预计回款日期').value = date.setDate(date.getDate() + 30);
+  } else if (selected_key == 1402171628267376640) {
+      let date = new Date(Number(create_time));
+      Page.getArrayCtrl('回款情况').getRowAtIndexes([autoindex - 1])[0].getCtrl('预计回款日期').value = date.setDate(date.getDate() + 30 + 40);
+  }
+  ```
+
+  效果：
+
+  <img src="https://static.lee1224.com/aPaaSdocs/image-20210630103251281.png" alt="image-20210630103251281" style="zoom:67%;" />
+
+  
+
 # tips：
 
 ## Linux常用
