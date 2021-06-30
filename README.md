@@ -83,6 +83,8 @@
 
 ## EditorTable-编辑表格
 
+[开发者网站查看更多](http://apaas.wxchina.com:8881/2020/10/09/editortable-%e7%bc%96%e8%be%91%e8%a1%a8%e6%a0%bc-2/)
+
 获取数据：
 
 |       方法        |         简要说明          |                           参数类型                           | 返回值类型 |
