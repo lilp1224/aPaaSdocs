@@ -81,14 +81,33 @@
     _output[0].daterange_self = {"start":_output[0].contract_start_date,"end":_output[0].contract_end_date}
    ```
 
+# tips：
 
-# tips：小站部署
+## Linux常用
 
-## 方式1：git仓库托管
+```bash
+####### 防火墙 #######
+firewall-cmd --zone=public --add-port=7777/tcp --permanent
+firewall-cmd --zone=public --add-port=7777/udp --permanent
+
+firewall-cmd --reload
+firewall-cmd --list-all  # 查看防火墙规则
+
+####### 把SELinux永久设定为Permissive模式 #######
+/usr/sbin/sestatus -v  # 查看当前状态
+vi /etc/selinux/config
+SELINUX=disabled
+```
+
+
+
+## 小站部署
+
+### 方式1：git仓库托管
 
 直接上传至GitHub或者gitee，开启pages功能即可。有条件可以上域名上CDN。
 
-## 方式二：docker部署
+### 方式2：docker部署
 
 1. 首先根据[官网教程](https://docsify.js.org/#/quickstart)进行本地初始化。
 
@@ -139,3 +158,75 @@
    ```
 
 7. done!
+
+### 方式3：
+
+1. 安装nginx推荐docker安装，把网站目录以及配置文件映射到宿主机。
+
+   - 目录结构
+
+     ```
+     .
+     | -- conf.d
+     |    | -- nginx.conf
+     | -- dist
+     |    | -- index.html
+     |    | -- 50x.html
+     | -- compose-nginx.yaml
+     | -- startup.sh
+     ```
+
+   - compose-nginx.yaml
+
+     ```yaml
+     version: '3'
+     
+     # docker network create nginx_bridge
+     networks:
+       nginx_bridge:
+         driver: bridge
+     
+     services:
+       nginx:
+         image: nginx:stable-alpine
+         #image: nginx:1.19.1-alpine
+         container_name: nginx-alpine
+         restart: always
+         privileged: true
+         environment:
+           - TZ=Asia/Shanghai 
+         ports:
+           - 8080:80
+           - 80:80
+           - 443:443
+         volumes:
+           - /etc/localtime:/etc/localtime:ro
+           #- ./conf/nginx.conf:/etc/nginx/nginx.conf:ro
+           - ./conf.d:/etc/nginx/conf.d
+           - ./log:/var/log/nginx
+           - ./dist:/opt/dist:ro
+         networks:
+           - nginx_bridge
+     ```
+
+   - 构建
+
+     ```bash
+     docker-compose -f ./compose-nginx.yaml up -d
+     ```
+
+     
+
+2. 配置nginx
+
+   ```nginx
+   server {
+     listen 80;
+     server_name  your.domain.com;
+   
+     location / {
+       alias /opt/dist/docs/;
+       index index.html;
+     }
+   }
+   ```
