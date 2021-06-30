@@ -139,6 +139,18 @@
   <img src="https://static.lee1224.com/aPaaSdocs/image-20210630103251281.png" alt="image-20210630103251281" style="zoom:67%;" />
 
   
+## 获取页面传参
+
+```js
+let linkparams = Page.getLinkParams().__linkparam;
+if(linkparams.__pagestatus == 2){
+    Page.getCtrl('contract_id').value = "";
+}
+```
+
+
+
+  
 
 
 
