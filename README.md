@@ -161,7 +161,252 @@ if(linkparams.__pagestatus == 2){
 
 
 
+# 数据权限
+
+数权限控制就是在进行列表查询的sql语句后拼接上限制条件，根据用户不同的身份权限查询出不同的数据。
+
+下面是一个例子：（跟随客户权限+我参与的拜访记录）
+
+- 首先在领域的查询后添加上权限控制关键字并指定实体 `RULEOBJ("tn_cus_visitrecord")`
+
+  ![image-20210714113858571](https://static.lee1224.com/aPaaSdocs/image-20210714113858571.png)
+
+- 然后在数据权限规则中配置规则
+
+  <img src="https://static.lee1224.com/aPaaSdocs/image-20210714114815382.png" alt="image-20210714114815382" style="zoom:67%;" />
+
+- 然后给对应角色挂上权限，done！
+
 # tips：
+
+## 文件预览
+
+开源项目地址：https://gitee.com/kekingcn/file-online-preview
+
+#### 1.部署
+
+- docker-compose部署（项目官方提供的即用镜像可以配置不能定制）
+
+  ```yaml
+  version: '2' #指定 compose 文件的版本
+  services: #通过镜像安装容器的配置
+    kkfileview:
+      image: keking/kkfileview:latest #使用的镜像
+      restart: always #当Docker重启时，该容器重启
+      container_name: kkfileview
+      ports:
+        - 9977:8012 #端口映射
+      volumes:
+        - /root/kkfileview/file/:/opt/kkFileView-3.5.1/file/
+        - /root/kkfileview/config/application.properties:/opt/kkFileView-3.5.1/config/application.properties  # 需要先拷贝一个文件出来再进行关联
+  ```
+
+- dockerfile部署
+
+  ```dockerfile
+  FROM ubuntu:20.04
+  MAINTAINER lilp "liyanpeng@wxchina.com"
+  ADD kkFileView-*.tar.gz /opt/
+  COPY fonts/* /usr/share/fonts/chinese/
+  RUN echo "deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse\ndeb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse\ndeb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse\ndeb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse\ndeb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse\ndeb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse\ndeb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse\ndeb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse\ndeb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse\ndeb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse" > /etc/apt/sources.list &&\
+  	apt-get clean && apt-get update &&\
+  	apt-get install -y locales && apt-get install -y language-pack-zh-hans &&\
+  	localedef -i zh_CN -c -f UTF-8 -A /usr/share/locale/locale.alias zh_CN.UTF-8 && locale-gen zh_CN.UTF-8 &&\
+  	apt-get install -y tzdata && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &&\
+  	apt-get install -y libxrender1 && apt-get install -y libxt6 && apt-get install -y libxext-dev && apt-get install -y libfreetype6-dev &&\
+  	apt-get install -y wget && apt-get install -y ttf-mscorefonts-installer && apt-get install -y fontconfig &&\
+  	apt-get install ttf-wqy-microhei &&\
+  	apt-get install ttf-wqy-zenhei &&\
+  	apt-get install xfonts-wqy &&\
+      cd /tmp &&\
+  	wget https://kkfileview.keking.cn/server-jre-8u251-linux-x64.tar.gz &&\
+  	tar -zxf /tmp/server-jre-8u251-linux-x64.tar.gz && mv /tmp/jdk1.8.0_251 /usr/local/ &&\
+  
+  #	安装 OpenOffice
+  #	wget https://kkfileview.keking.cn/Apache_OpenOffice_4.1.6_Linux_x86-64_install-deb_zh-CN.tar.gz -cO openoffice_deb.tar.gz &&\
+  #	tar -zxf /tmp/openoffice_deb.tar.gz && cd /tmp/zh-CN/DEBS &&\
+  #	dpkg -i *.deb && dpkg -i desktop-integration/openoffice4.1-debian-menus_4.1.6-9790_all.deb &&\
+  
+  #	安装 libreoffice
+      apt-get install -y libxinerama1 libcairo2 libcups2 libx11-xcb1 &&\
+      wget https://kkfileview.keking.cn/LibreOffice_7.1.4_Linux_x86-64_deb.tar.gz -cO libreoffice_deb.tar.gz &&\
+      tar -zxf /tmp/libreoffice_deb.tar.gz && cd /tmp/LibreOffice_7.1.4.2_Linux_x86-64_deb/DEBS &&\
+      dpkg -i *.deb &&\
+  
+  	rm -rf /tmp/* && rm -rf /var/lib/apt/lists/* &&\
+      cd /usr/share/fonts/chinese &&\
+      mkfontscale &&\
+      mkfontdir &&\
+      fc-cache -fv
+  ENV JAVA_HOME /usr/local/jdk1.8.0_251
+  ENV CLASSPATH $JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
+  ENV PATH $PATH:$JAVA_HOME/bin
+  ENV LANG zh_CN.UTF-8
+  ENV LC_ALL zh_CN.UTF-8
+  ENV KKFILEVIEW_BIN_FOLDER /opt/kkFileView-4.0.0/bin
+  ENTRYPOINT ["java","-Dfile.encoding=UTF-8","-Dspring.config.location=/opt/kkFileView-4.0.0/config/application.properties","-jar","/opt/kkFileView-4.0.0/bin/kkFileView-4.0.0.jar"]
+  ```
+
+  jar包 font/  以及dockerfile 在同一目录，application.properties文件要先存在对应目录下才行
+
+  1. 构建镜像
+
+     ```bas
+     docker build -f Dockerfile -t lilp/online-preview:v1.0 .   # 构建镜像
+     ```
+
+  2. 运行容器
+
+     ```bash
+     docker run -d --name onlinePreview -p 9977:8012 -v /root/kkfileview/config/application.properties:/opt/kkFileView-4.0.0/config/application.properties -v /root/kkfileview/file:/opt/kkFileView-4.0.0/file lilp/online-preview:v1.0
+     ```
+
+  3. 配置文件(按需修改)
+
+     ```properties
+     #######################################不可动态配置，需要重启生效#######################################
+     server.port = ${KK_SERVER_PORT:8012}
+     server.servlet.context-path= ${KK_CONTEXT_PATH:/}
+     server.servlet.encoding.charset = utf-8
+     #文件上传限制
+     spring.servlet.multipart.max-file-size=100MB
+     spring.servlet.multipart.max-request-size=100MB
+     ## Freemarker 配置
+     spring.freemarker.template-loader-path = classpath:/web/
+     spring.freemarker.cache = false
+     spring.freemarker.charset = UTF-8
+     spring.freemarker.check-template-location = true
+     spring.freemarker.content-type = text/html
+     spring.freemarker.expose-request-attributes = true
+     spring.freemarker.expose-session-attributes = true
+     spring.freemarker.request-context-attribute = request
+     spring.freemarker.suffix = .ftl
+     
+     # office-plugin
+     ## office转换服务的进程数，默认开启两个进程
+     office.plugin.server.ports = 2001,2002
+     ## office 转换服务 task 超时时间，默认五分钟
+     office.plugin.task.timeout = 5m
+     
+     #文件资源路径（默认为打包根路径下的file目录下）
+     #file.dir = D:\\kkFileview\\
+     file.dir = ${KK_FILE_DIR:default}
+     #openoffice home路径
+     #office.home = C:\\Program Files (x86)\\OpenOffice 4
+     office.home = ${KK_OFFICE_HOME:default}
+     
+     #缓存实现类型，不配默认为内嵌RocksDB(type = default)实现，可配置为redis(type = redis)实现（需要配置spring.redisson.address等参数）和 JDK 内置对象实现（type = jdk）,
+     cache.type =  ${KK_CACHE_TYPE:jdk}
+     #redis连接，只有当cache.type = redis时才有用
+     spring.redisson.address = ${KK_SPRING_REDISSON_ADDRESS:127.0.0.1:6379}
+     spring.redisson.password = ${KK_SPRING_REDISSON_PASSWORD:123456}
+     #缓存是否自动清理 true 为开启，注释掉或其他值都为关闭
+     cache.clean.enabled = ${KK_CACHE_CLEAN_ENABLED:true}
+     #缓存自动清理时间，cache.clean.enabled = true时才有用，cron表达式，基于Quartz cron
+     cache.clean.cron = ${KK_CACHE_CLEAN_CRON:0 0 3 * * ?}
+     
+     #######################################可在运行时动态配置#######################################
+     #提供预览服务的地址，默认从请求url读，如果使用nginx等反向代理，需要手动设置
+     #base.url = https://file.keking.cn
+     base.url = ${KK_BASE_URL:default}
+     
+     #信任站点，多个用','隔开，设置了之后，会限制只能预览来自信任站点列表的文件，默认不限制
+     #trust.host = file.keking.cn,kkfileview.keking.cn
+     trust.host = ${KK_TRUST_HOST:default}
+     
+     #是否启用缓存
+     cache.enabled = ${KK_CACHE_ENABLED:true}
+     
+     #文本类型，默认如下，可自定义添加
+     simText = ${KK_SIMTEXT:txt,html,htm,asp,jsp,xml,json,properties,md,gitignore,log,java,py,c,cpp,sql,sh,bat,m,bas,prg,cmd}
+     #多媒体类型，默认如下，可自定义添加
+     media = ${KK_MEDIA:mp3,wav,mp4,flv}
+     #office类型文档(word ppt)样式，默认为图片(image)，可配置为pdf（预览时也有按钮切换）
+     office.preview.type = ${KK_OFFICE_PREVIEW_TYPE:image}
+     #是否关闭office预览切换开关，默认为false，可配置为true关闭
+     office.preview.switch.disabled = ${KK_OFFICE_PREVIEW_SWITCH_DISABLED:false}
+     
+     #是否禁止下载转换生成的pdf文件
+     pdf.download.disable = ${KK_PDF_DOWNLOAD_DISABLE:true}
+     
+     #预览源为FTP时 FTP用户名，可在ftp url后面加参数ftp.username=ftpuser指定，不指定默认用配置的
+     ftp.username = ${KK_FTP_USERNAME:ftpuser}
+     #预览源为FTP时 FTP密码，可在ftp url后面加参数ftp.password=123456指定，不指定默认用配置的
+     ftp.password = ${KK_FTP_PASSWORD:123456}
+     #预览源为FTP时, FTP连接默认ControlEncoding(根据FTP服务器操作系统选择，Linux一般为UTF-8，Windows一般为GBK)，可在ftp url后面加参数ftp.control.encoding=UTF-8指定，不指定默认用配置的
+     ftp.control.encoding = ${KK_FTP_CONTROL_ENCODING:UTF-8}
+     
+     #水印内容
+     #例：watermark.txt = ${WATERMARK_TXT:内部文件，严禁外泄}
+     #如需取消水印，内容设置为空即可，例：watermark.txt = ${WATERMARK_TXT:}
+     watermark.txt = ${WATERMARK_TXT:lilpum测试}
+     #水印x轴间隔
+     watermark.x.space = ${WATERMARK_X_SPACE:10}
+     #水印y轴间隔
+     watermark.y.space = ${WATERMARK_Y_SPACE:10}
+     #水印字体
+     watermark.font = ${WATERMARK_FONT:微软雅黑}
+     #水印字体大小
+     watermark.fontsize = ${WATERMARK_FONTSIZE:18px}
+     #水印字体颜色
+     watermark.color = ${WATERMARK_COLOR:black}
+     #水印透明度，要求设置在大于等于0.005，小于1
+     watermark.alpha = ${WATERMARK_ALPHA:0.07}
+     #水印宽度
+     watermark.width = ${WATERMARK_WIDTH:180}
+     #水印高度
+     watermark.height = ${WATERMARK_HEIGHT:80}
+     #水印倾斜度数，要求设置在大于等于0，小于90
+     watermark.angle = ${WATERMARK_ANGLE:10}
+     ```
+
+#### 2.使用
+
+```js
+var url = 'http://127.0.0.1:8080/file/test.txt'; //要预览文件的访问地址
+window.open('http://127.0.0.1:8012/onlinePreview?url='+encodeURIComponent(base64Encode(url)));
+```
+
+新增多图片同时预览功能，接口如下
+
+```js
+var fileUrl =url1+"|"+"url2";//多文件使用“|”字符隔开
+window.open('http://127.0.0.1:8012/picturesPreview?urls='+encodeURIComponent(base64Encode(fileUrl)));
+```
+
+举个不成熟的栗子：
+
+```js
+let showIMG = (url) => {
+    window.open('http://lilp.lee1224.com:9977/onlinePreview?url=' + encodeURIComponent(btoa(url)));
+}
+
+/* 拿到的文件url是不完全相对路径，根据文件名生成规则 拼接出文件的完整路径 */
+let data = Page.getCtrl('扫描件').value;
+
+if (data != null && data.length != 0) {
+    let json = JSON.parse(data);
+    let fileName = json[0].url;
+    let type = json[0].type;
+
+    let strDate = json[0].date;
+    let date = new Date(Number(strDate));
+    strDate = date.toJSON().substring(0, 10);
+    strDate = strDate.replace(/-/g, "");
+
+    let url = "http://xxx.xxx.xxx.xxx:xxxx/apaas-storage";
+
+    if (type.startsWith("image")) {
+        // 
+        url += "/" + fileName.substring(0, 3) + "/img/" + strDate + "/1008442/" + fileName;
+    } else {
+        url += "/" + fileName.substring(0, 3) + "/att/" + strDate + "/1008442/" + fileName;
+    }
+    showIMG(url);
+}
+```
+
+
 
 ## Linux常用
 
