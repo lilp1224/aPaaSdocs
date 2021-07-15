@@ -140,6 +140,25 @@
 
   <img src="https://static.lee1224.com/aPaaSdocs/image-20210630103251281.png" alt="image-20210630103251281" style="zoom:67%;" />
 
+- 场景3：获取到下拉框选值，并带出text到文本编辑框
+
+  <img src="https://static.lee1224.com/aPaaSdocs/image-20210715104114304.png" alt="image-20210715104114304" style="zoom:67%;" />
+
+  ```js
+  let edtable = Page.getArrayCtrl('edtable');
+  let selected = edtable.getInScope('focused');
+  let index = selected.autoindex - 1;
+  
+  let dropdown = edtable.getRowAtIndexes([index])[0].getPickerCtrl('dropdown');
+  
+  let option = dropdown.getOption().find(elem => {
+      return elem.key == dropdown.value;
+  });
+  // option有值是同步更新文本框内容 删除选项时option为undefined 假 情况文本框内容
+  option ? edtable.getRowAtIndexes([index])[0].getPickerCtrl('textinput').value = option.text : edtable.getRowAtIndexes([index])[0].getPickerCtrl('textinput').value = '';
+  
+  ```
+
   
 ## 获取页面传参
 
