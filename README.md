@@ -202,7 +202,7 @@ if(linkparams.__pagestatus == 2){
 
 开源项目地址：https://gitee.com/kekingcn/file-online-preview
 
-#### 1.部署
+### 1.部署
 
 - docker-compose部署（项目官方提供的即用镜像可以配置不能定制）
 
@@ -379,7 +379,7 @@ if(linkparams.__pagestatus == 2){
      watermark.angle = ${WATERMARK_ANGLE:10}
      ```
 
-#### 2.使用
+### 2.使用
 
 ```js
 var url = 'http://127.0.0.1:8080/file/test.txt'; //要预览文件的访问地址
