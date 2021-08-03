@@ -169,6 +169,16 @@ if(linkparams.__pagestatus == 2){
 }
 ```
 
+## 修改控件属性
+
+可使用setProperty()方法修改控件属性例如修改 placeholder 的值：
+
+```js
+option ? edtable.getRowAtIndexes([index])[0].getPickerCtrl('套打名称txt').setProperty('placeholder',option.text) : edtable.getRowAtIndexes([index])[0].getPickerCtrl('套打名称txt').setProperty('placeholder', '');
+```
+
+更多控件操作：[开发者平台](http://apaas.wxchina.com:8881/2020/05/19/%e6%8e%a7%e4%bb%b6%e6%93%8d%e4%bd%9c/)
+
 # 系统对象（System.xxx）
 
 |        方法         |         说明         |                            返回值                            |
