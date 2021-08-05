@@ -225,6 +225,8 @@ option ? edtable.getRowAtIndexes([index])[0].getPickerCtrl('套打名称txt').se
 
 开源项目地址：https://gitee.com/kekingcn/file-online-preview
 
+[演示](http://lilp.lee1224.com:9977/)
+
 ### 1.部署
 
 - docker-compose部署（项目官方提供的即用镜像可以配置不能定制）
