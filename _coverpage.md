@@ -1,6 +1,6 @@
 <!-- _coverpage.md -->
 
-<img src="https://static.lee1224.com/navbarlogo.png" alt="logo" style="zoom:33%;" />
+<img src="https://lilp-1257254543.file.myqcloud.com/navbarlogo.png" alt="logo" style="zoom:33%;" />
 
 # FUCK aPaaS<small>众所周知 `fuck` 译作:学习</small>
 
@@ -15,4 +15,4 @@
 
 <!-- 背景图片 --> 
 
-![](https://static.lee1224.com/bg/bg0.jpg)
+![](https://lilp-1257254543.file.myqcloud.com/bg/bg0.jpg)

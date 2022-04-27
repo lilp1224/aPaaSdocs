@@ -4,15 +4,15 @@
 
 问题：联动下拉菜单（键值对形式例如：字典、数据源）清除父级value时字迹菜单option清除，获取不到文本直接显示键值。如图：
 
-![image-20210629131236759](https://static.lee1224.com/aPaaSdocs/image-20210629131236757.png)
+![image-20210629131236759](https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210629131236757.png)
 
-![image-20210629131618317](https://static.lee1224.com/aPaaSdocs/image-20210629131618317.png)
+![image-20210629131618317](https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210629131618317.png)
 
 解决方法：
 
 1. 父级菜单值改变时加载子菜单的option（例如：加载字典），并且指定根据父级的值来查询子级option并绑定。
 
-   <img src="https://static.lee1224.com/aPaaSdocs/image-20210629133030005.png" alt="image-20210629133030005" style="zoom: 50%;" />
+   <img src="https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210629133030005.png" alt="image-20210629133030005" style="zoom: 50%;" />
 
 2. 添加UIflycode处理子菜单当前值是否显示。
 
@@ -37,7 +37,7 @@
    
 3. done!
 
-   ![image-20210629134114801](https://static.lee1224.com/aPaaSdocs/image-20210629134114801.png)
+   ![image-20210629134114801](https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210629134114801.png)
    
 4. 补充一句 数据源同理 灵活运用
 
@@ -55,11 +55,11 @@
 
 问题描述：正常情况daterange控件可以直接绑定开始和结束时间戳（在搜索栏中可以正常绑定）。可有时会出现绑定后不生效，请求参数中直接以json字符串形式进行传输。
 
-<img src="https://static.lee1224.com/aPaaSdocs/image-20210629185616134.png" alt="image-20210629185616134" style="zoom:67%;" />
+<img src="https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210629185616134.png" alt="image-20210629185616134" style="zoom:67%;" />
 
-<img src="https://static.lee1224.com/aPaaSdocs/image-20210629190029444.png" alt="image-20210629190029444" style="zoom: 50%;" />
+<img src="https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210629190029444.png" alt="image-20210629190029444" style="zoom: 50%;" />
 
-<img src="https://static.lee1224.com/aPaaSdocs/image-20210629190302951.png" alt="image-20210629190302951" style="zoom:67%;" />
+<img src="https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210629190302951.png" alt="image-20210629190302951" style="zoom:67%;" />
 
 解决办法：
 
@@ -138,11 +138,11 @@
 
   效果：
 
-  <img src="https://static.lee1224.com/aPaaSdocs/image-20210630103251281.png" alt="image-20210630103251281" style="zoom:67%;" />
+  <img src="https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210630103251281.png" alt="image-20210630103251281" style="zoom:67%;" />
 
 - 场景3：获取到下拉框选值，并带出text到文本编辑框
 
-  <img src="https://static.lee1224.com/aPaaSdocs/image-20210715104114304.png" alt="image-20210715104114304" style="zoom:67%;" />
+  <img src="https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210715104114304.png" alt="image-20210715104114304" style="zoom:67%;" />
 
   ```js
   let edtable = Page.getArrayCtrl('edtable');
@@ -196,8 +196,8 @@ option ? edtable.getRowAtIndexes([index])[0].getPickerCtrl('套打名称txt').se
 
 |        方法         |         说明         |                            返回值                            |
 | :-----------------: | :------------------: | :----------------------------------------------------------: |
-|     **user()**      |     获取用户信息     | <img src="https://static.lee1224.com/aPaaSdocs/image-20210630115620254.png" alt="image-20210630115620254" style="zoom:33%;" /> |
-|    **context()**    | 获取当前用户登录信息 | <img src="https://static.lee1224.com/aPaaSdocs/image-20210630115657977.png" alt="image-20210630115657977" style="zoom:33%;" /> |
+|     **user()**      |     获取用户信息     | <img src="https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210630115620254.png" alt="image-20210630115620254" style="zoom:33%;" /> |
+|    **context()**    | 获取当前用户登录信息 | <img src="https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210630115657977.png" alt="image-20210630115657977" style="zoom:33%;" /> |
 |     **date()**      |  获取服务端当前时间  |                             Date                             |
 | **functionCodes()** |     获取功能权限     |   返回当前用户的完整功能权限code的数组，Array形如[String]    |
 
@@ -211,11 +211,11 @@ option ? edtable.getRowAtIndexes([index])[0].getPickerCtrl('套打名称txt').se
 
 - 首先在领域的查询后添加上权限控制关键字并指定实体 `RULEOBJ("tn_cus_visitrecord")`
 
-  ![image-20210714113858571](https://static.lee1224.com/aPaaSdocs/image-20210714113858571.png)
+  ![image-20210714113858571](https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210714113858571.png)
 
 - 然后在数据权限规则中配置规则
 
-  <img src="https://static.lee1224.com/aPaaSdocs/image-20210714114815382.png" alt="image-20210714114815382" style="zoom:67%;" />
+  <img src="https://lilp-1257254543.file.myqcloud.com/aPaaSdocs/image-20210714114815382.png" alt="image-20210714114815382" style="zoom:67%;" />
 
 - 然后给对应角色挂上权限，done！
 
