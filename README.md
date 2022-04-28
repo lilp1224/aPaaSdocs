@@ -1,6 +1,188 @@
-# aPaaS踩坑记录
+# aPaaS基操
 
-## 下拉菜单联动
+## Flycode
+
+### 对象选择器自带查询条件添加
+
+1. 添加查询参数
+
+   <img src="https://lilpum-1257254543.file.myqcloud.com/PicGo/image-20220422175349449.png" alt="image-20220422175349449" style="zoom:50%;" />
+
+2. 打开 `业务对象通用查询` 领域 拼接查询sql
+
+   ![image-20220422175407916](https://lilpum-1257254543.file.myqcloud.com/PicGo/image-20220422175407916.png)
+
+   日常屏蔽 自带查询
+
+   <img src="https://lilpum-1257254543.file.myqcloud.com/PicGo/image-20220422175918138.png" alt="image-20220422175918138" style="zoom:70%;" />
+
+   ```js
+       if (!!extraparamsobj && !!extraparamsobj.cantfind) {
+         wheresql = wheresql.concat(" and ( ");
+         wheresql = wheresql.concat(objectmark, ".id=", extraparamsobj.cantfind);
+         wheresql = wheresql.concat(")");
+       }
+   ```
+
+   
+
+### 时间格式化
+
+```js
+dateFormat("YYYY-mm-dd HH:MM:SS", new Date(NOW.time()));
+dateFormat("YYYY-mm-dd HH:MM:SS", new Date("2022-12-24 12:58:57"));
+/************************************** 格式化时间 */
+function dateFormat(fmt, date) {
+    var ret;
+    var opt = {
+        "Y+": date.getFullYear().toString(),        // 年
+        "m+": (date.getMonth() + 1).toString(),     // 月
+        "d+": date.getDate().toString(),            // 日
+        "H+": date.getHours().toString(),           // 时
+        "M+": date.getMinutes().toString(),         // 分
+        "S+": date.getSeconds().toString()          // 秒
+        // 有其他格式化字符需求可以继续添加，必须转化成字符串
+    }
+    for (var k in opt) {
+        ret = new RegExp("(" + k + ")").exec(fmt);
+        if (ret) {
+            fmt = fmt.replace(ret[1], (ret[1].length == 1) ? (opt[k]) : padStart(opt[k], ret[1].length, "0"))
+        }
+    }
+    return fmt;
+}
+/*************** padStart*/
+function padStart(rawStr, targetLength, padString) {
+    targetLength = targetLength >> 0; //truncate if number or convert non-number to 0;
+    padString = String((typeof padString !== 'undefined' ? padString : ' '));
+    if (rawStr.length > targetLength) {
+        return String(rawStr);
+    }
+    else {
+        targetLength = targetLength - rawStr.length;
+        if (targetLength > padString.length) {
+            padString += padString.repeat(targetLength / padString.length);
+        }
+        return padString.slice(0, targetLength) + String(rawStr);
+    }
+}
+/*************** 格式化时间end*/
+```
+
+### 获取OSS地址
+
+```js
+var ossEndpoint = FLY.call("microservice.getCurEnvironmentHost", {}).data.ossEndpoint;
+
+/*************** 获取OSS地址*/
+function getAttachmentsKV(json) {
+    if (json != null && json.length !== 0) {
+        // var json = JSON.parse(data);
+        var fileName = json.url;
+        var type = json.type;
+        var strDate = json.date;
+        var date = new Date(Number(strDate));
+        strDate = date.toJSON().substring(0, 10);
+        strDate = strDate.replace(/-/g, "");
+        var url = ossEndpoint;
+        if (type.startsWith("image")) {
+            url += "/" + fileName.substring(0, 3) + "/img/" + strDate + "/1008442/" + fileName;
+        } else {
+            url += "/" + fileName.substring(0, 3) + "/att/" + strDate + "/1008442/" + fileName;
+        }
+    }
+    var att = {};
+    att.key = json.filename;
+    att.value = url;
+    return att;
+}
+/*************** 获取OSS地址 end*/
+```
+
+### 字符串判空
+
+```js
+function isEmpty(obj) {
+  if (obj === null) return true;
+  if (typeof obj === 'undefined') {
+    return true;
+  }
+  if (typeof obj === 'string') {
+    if (obj === "") {
+      return true;
+    }
+    var reg = new RegExp("^([ ]+)|([　]+)$");
+    return reg.test(obj);
+  }
+  return false;
+}
+```
+
+### 手写分页
+
+```js
+/** 
+常规分页：
+ 1. 首先获取总条数
+ 2. 总页数(循环次数) 查询次数 = （总行数 + 每次查询行数 - 1）/ 每次查询行数
+ 3. 起始行 = (当前页数 - 1) * 每次查询行数
+*/
+
+var _pagingParam = IN.__paging;
+var _pagesize = 20;
+var _offset = 0;
+if (!!_pagingParam) {
+  _pagesize = _pagingParam.__pagesize;
+  var pageindex = _pagingParam.__pageindex;
+  _offset = pageindex == 0 ? 0 : (pageindex * _pagesize); // __pageindex从0开始 不需要减1
+}
+
+// TODO
+
+if (!!_pagingParam) {
+    OUT.__paging = { "__pageindex": _pagingParam.__pageindex, "__pagesize": _pagingParam.__pagesize, "__itemcount": count_res[0].count };  // 页数 每页显示数 总行数 
+}
+
+```
+
+### 数字金额转中文大写
+
+```js
+/**************************数字金额转大写****** */
+function numToChString(n) {
+    if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(n)) {
+        return "数据非法";  //判断数据是否大于0
+    }
+    var unit = "千百拾亿千百拾万千百拾元角分", str = "";
+    n += "00";
+    var indexpoint = n.indexOf('.');  // 如果是小数，截取小数点前面的位数
+    if (indexpoint >= 0) {
+        n = n.substring(0, indexpoint) + n.substr(indexpoint + 1, 2);   // 若为小数，截取需要使用的unit单位
+    }
+    unit = unit.substr(unit.length - n.length);  // 若为整数，截取需要使用的unit单位
+    for (var i = 0; i < n.length; i++) {
+        str += "零壹贰叁肆伍陆柒捌玖".charAt(n.charAt(i)) + unit.charAt(i);  //遍历转化为大写的数字
+    }
+    return str.replace(/零(千|百|拾|角)/g, "零").replace(/(零)+/g, "零").replace(
+        /零(万|亿|元)/g, "$1").replace(/(亿)万|壹(拾)/g, "$1$2").replace(/^元零?|零分/g,
+            "").replace(/元$/g, "元整"); // 替换掉数字里面的零字符，得到结果
+}
+/**************************end****** */
+```
+
+### 数字补位 前面补0
+
+```js
+function prefixInteger(num, length) {
+    return (Array(length).join('0') + num).slice(-length);
+}
+```
+
+
+
+## UIflycode
+
+### 下拉菜单联动
 
 问题：联动下拉菜单（键值对形式例如：字典、数据源）清除父级value时字迹菜单option清除，获取不到文本直接显示键值。如图：
 
@@ -51,7 +233,7 @@
    Page.getPickerCtrl("txt竞品项目").clearOptions();
    ```
 
-## daterange控件传值问题
+### daterange控件传值问题
 
 问题描述：正常情况daterange控件可以直接绑定开始和结束时间戳（在搜索栏中可以正常绑定）。可有时会出现绑定后不生效，请求参数中直接以json字符串形式进行传输。
 
@@ -81,7 +263,7 @@
     _output[0].daterange_self = {"start":_output[0].contract_start_date,"end":_output[0].contract_end_date}
    ```
 
-## EditorTable-编辑表格
+### EditorTable-编辑表格
 
 [开发者网站查看更多](http://apaas.wxchina.com:8881/2020/10/09/editortable-%e7%bc%96%e8%be%91%e8%a1%a8%e6%a0%bc-2/)
 
@@ -159,8 +341,79 @@
   
   ```
 
-  
-## 获取页面传参
+#### 可编辑表案例
+
+```js
+
+let data = Page.getValue('eng_bom');
+if (data && data.length > 0) {
+  // 获取焦点行 数据
+  let item = Page.getArrayCtrl('ordereditortable').getInScope('focused');
+  if (item) {
+    if (item.temporary_id) {
+      Page.alert("warning", "该套件已经展开！不能重复展开！");
+      throw "该套件已经展开！不能重复展开！";
+    }
+    let index = Page.getArrayCtrl('ordereditortable').getInScope('focused').autoindex - 1;
+    // 根据索引获取控件
+    let curRow = Page.getArrayCtrl('ordereditortable').getRowAtIndexes([index])[0];
+    curRow.getCtrl("temporary_id").value = data[0].temporary_id;
+    curRow.getCtrl("material_bom_type").value = "套件父项";
+    curRow.getCtrl("frowtype").value = "Parent";
+    let newIndex = index;
+    let keys = Object.keys(item); // 获取所有控件名称
+
+    data.forEach((bom) => {
+      item.明细id = null;
+      item.rank = null;
+      item.con_actual_unit = '';  //合同销售单位
+      item.con_saleqty = '';      // 合同销售数量
+      item.productcode = bom.fmaterialidchild_fnumber;
+      item.temporary_id = bom.temporary_id;
+      item.parent_productcode = bom.materialid_fnumber;
+      item.coefficient = bom.coefficient;
+      item.material_bom_type = "套件子项";
+      item.frowtype = "Son";
+      let setter = ArrayCtrlSetter();
+
+      newIndex = newIndex + 1;
+      Page.getArrayCtrl('ordereditortable').insert([item], newIndex, setter);
+      // 对象选择器复职基操
+      let _temp = '[{' + '\'' + 'detail_product' + '\'' + ':' + '\'' + '{' + '\"' + 'text' + '\"' + ':' + '\"' + bom.fmaterialidchild_fname + '\"' + ',' + '\"' + 'key' + '\"' + ':' + '\"' + bom.fmaterialidchild_id + '\"' + '}' + '\'' + '}]';
+      let _t = eval("(" + _temp + ")");
+      setter.append('detail_product', '物料名称', 'fullvalue');
+      Page.getArrayCtrl('ordereditortable').update(_t, [newIndex], setter);
+
+      let _temp2 = '[{' + '\'' + 'project_three' + '\'' + ':' + '\'' + '{' + '\"' + 'text' + '\"' + ':' + '\"' + "123" + '\"' + ',' + '\"' + 'key' + '\"' + ':' + '\"' + "456" + '\"' + '}' + '\'' + '}]';
+      let _t2 = eval("(" + _temp2 + ")");
+      _t2[0].project_three = '{"text":"' + (item.project3 ? item.project3 : item.project_3_name) + '","key":"' + item.project_three + '"}';
+      setter.append('project_three', '项目三', 'fullvalue');
+      Page.getArrayCtrl('ordereditortable').update(_t2, [newIndex], setter);
+
+      let _temp3 = '[{' + '\'' + 'article_number' + '\'' + ':' + '\'' + '{' + '\"' + 'text' + '\"' + ':' + '\"' + item.other_number + '\"' + ',' + '\"' + 'key' + '\"' + ':' + '\"' + item.article_number + '\"' + '}' + '\'' + '}]';
+      let _t3 = eval("(" + _temp3 + ")");
+      setter.append('article_number', '国际货号', 'fullvalue');
+      Page.getArrayCtrl('ordereditortable').update(_t3, [newIndex], setter);
+
+      let _temp4 = '[{' + '\'' + 'actual_unit' + '\'' + ':' + '\'' + '{' + '\"' + 'text' + '\"' + ':' + '\"' + bom.fchildunitid_fname + '\"' + ',' + '\"' + 'key' + '\"' + ':' + '\"' + bom.actual_unit_id + '\"' + '}' + '\'' + '}]';
+      let _t4 = eval("(" + _temp4 + ")");
+      setter.append('actual_unit', '需求发货单位', 'fullvalue');
+      Page.getArrayCtrl('ordereditortable').update(_t4, [newIndex], setter);
+
+      let row = Page.getArrayCtrl('ordereditortable').getRowAtIndexes([newIndex])[0];
+      keys.forEach((key) => {
+        if (row.getCtrl(key)) {
+          row.getCtrl(key).readonly = true;
+        }
+      });
+    });
+  }
+}
+```
+
+
+
+### 获取页面传参
 
 ```js
 let linkparams = Page.getLinkParams().__linkparam;
@@ -169,7 +422,7 @@ if(linkparams.__pagestatus == 2){
 }
 ```
 
-## 获取下拉框dropdown控件的text
+### 获取下拉框dropdown控件的text
 
 ```js
 let edtable = Page.getArrayCtrl('contract_details_edtable');    
@@ -180,7 +433,7 @@ let option = dropdown.getOption().find(elem => {
 });
 ```
 
-## 修改控件属性
+### 修改控件属性
 
 可使用setProperty()方法修改控件属性例如修改 placeholder 的值：
 
@@ -192,7 +445,7 @@ option ? edtable.getRowAtIndexes([index])[0].getPickerCtrl('套打名称txt').se
 
 
 
-# 系统对象（System.xxx）
+### 系统对象（System.xxx）
 
 |        方法         |         说明         |                            返回值                            |
 | :-----------------: | :------------------: | :----------------------------------------------------------: |
@@ -599,5 +852,9 @@ SELINUX=disabled
      }
    }
    ```
-   test！！！！～～～～～～～～～～～～～～～～～～～～ 1997
 
+
+
+
+
+未完待续～
