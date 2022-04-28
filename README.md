@@ -182,6 +182,27 @@ function prefixInteger(num, length) {
 
 ## UIflycode
 
+### 执行事件
+
+<img src="https://lilpum-1257254543.file.myqcloud.com/PicGo/image-20220428171649156.png" alt="image-20220428171649156" style="zoom:50%;" />
+
+```js
+
+let checkedRowData = Page.getArrayCtrl('ordereditortable').getInScope('checked');
+let flag = true;
+checkedRowData.forEach((item) => {
+    if (item.parent_productcode){
+        flag = false;
+        Page.alert("warning","第 " +item.autoindex +" 行为套件子项，不允许删除！");
+    }
+});
+if (flag) {
+    Page.runEvent('delete_detail_notice');
+}
+```
+
+
+
 ### 下拉菜单联动
 
 问题：联动下拉菜单（键值对形式例如：字典、数据源）清除父级value时字迹菜单option清除，获取不到文本直接显示键值。如图：
