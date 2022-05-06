@@ -99,11 +99,13 @@ function getAttachmentsKV(json) {
 /*************** 获取OSS地址 end*/
 ```
 
-### 字符串判空
+### 判空方法
 
 ```js
 function isEmpty(obj) {
-  if (obj === null) return true;
+  if (obj === null) {
+    return true;
+  }
   if (typeof obj === 'undefined') {
     return true;
   }
@@ -114,7 +116,10 @@ function isEmpty(obj) {
     var reg = new RegExp("^([ ]+)|([　]+)$");
     return reg.test(obj);
   }
-  return false;
+  if (JSON.stringify(obj) === '{}') {
+    return true;
+  }
+  return obj.length === 0;
 }
 ```
 
