@@ -75,7 +75,7 @@ function padStart(rawStr, targetLength, padString) {
 var ossEndpoint = FLY.call("microservice.getCurEnvironmentHost", {}).data.ossEndpoint;
 
 /*************** 获取OSS地址*/
-function getAttachmentsKV(json) {
+function getAttachmentsKV(json,ossEndpoint) {
     if (json != null && json.length !== 0) {
         // var json = JSON.parse(data);
         var fileName = json.url;
@@ -116,8 +116,13 @@ function isEmpty(obj) {
     var reg = new RegExp("^([ ]+)|([　]+)$");
     return reg.test(obj);
   }
-  if (JSON.stringify(obj) === '{}') {
-    return true;
+  if (typeof obj === 'object') {
+    if (JSON.stringify(obj) === '[]') {
+      return true;
+    }
+    if (JSON.stringify(obj) === '{}') {
+      return true;
+    }
   }
   return obj.length === 0;
 }
